@@ -18,7 +18,7 @@ jobs:
       # Install dependencies (if needed)
       - name: Install dependencies
         run: |
-          npm install # If you're using Node.js for a build process
+          npm install # Uncomment if you need to install dependencies
       
       # Build the static site (if applicable)
       # If you have a build step, add it here. For example:
@@ -29,10 +29,13 @@ jobs:
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@v0.5.1
         with:
-          args: --acl public-read --delete
+          args: --delete  # The --acl public-read argument has been removed
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
 
+      # Optional: Print out a success message
+      - name: Success message
+        run: echo "Deployment to S3 completed successfully!"
