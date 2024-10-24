@@ -13,12 +13,16 @@ jobs:
       # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
-      
-      # Upload files to S3 (no build process)
+
+      # Debug: List files in the workspace
+      - name: List files for debugging
+        run: ls -R
+
+      # Upload files to S3
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@v0.5.1
         with:
-          args: --delete  # You can also add --acl public-read if needed
+          args: --acl public-read --delete --exact-timestamps --verbose
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
