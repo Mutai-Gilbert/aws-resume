@@ -1,6 +1,5 @@
 name: Deploy to S3
 
-# This triggers the workflow on every push to the main branch
 on:
   push:
     branches:
@@ -14,28 +13,14 @@ jobs:
       # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
-
-      # Install dependencies (if needed)
-      - name: Install dependencies
-        run: |
-          npm install
       
-      # Build the static site (if applicable)
-      # If you have a build step, add it here. For example:
-      # - name: Build the site
-      #   run: npm run build
-
-      # Upload files to S3
+      # Upload files to S3 (no build process)
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@v0.5.1
         with:
-          args: --delete  # The --acl public-read argument has been removed
+          args: --delete  # You can also add --acl public-read if needed
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
-
-      # Optional: Print out a success message
-      - name: Success message
-        run: echo "Deployment to S3 completed successfully!"
