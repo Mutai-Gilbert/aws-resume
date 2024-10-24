@@ -1,0 +1,38 @@
+name: Deploy to S3
+
+# This triggers the workflow on every push to the main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install dependencies (if needed)
+      - name: Install dependencies
+        run: |
+          npm install # If you're using Node.js for a build process
+      
+      # Build the static site (if applicable)
+      # If you have a build step, add it here. For example:
+      # - name: Build the site
+      #   run: npm run build
+
+      # Upload files to S3
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@v0.5.1
+        with:
+          args: --acl public-read --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
+
